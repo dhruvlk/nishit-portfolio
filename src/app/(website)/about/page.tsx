@@ -6,15 +6,19 @@ import { ImageReveal } from "@/components/animations/image-reveal";
 import { Reveal } from "@/components/animations/reveal";
 import { Portrait } from "@/components/common/portrait";
 import { ExpertiseSection } from "@/components/home/expertise-section";
-import { getProfile } from "@/lib/data/public";
+import { getProfile, getSiteSettings } from "@/lib/data/public";
+import { shareImage, socialMetadata } from "@/lib/seo";
 import { canOptimizeImage } from "@/lib/utils/media";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const p = await getProfile();
+  const [p, s] = await Promise.all([getProfile(), getSiteSettings()]);
+  const siteName = s.site_name || "Nishit Gundecha";
+  const description = p.intro || p.short_bio.split(/\n{2,}/)[0] || `${p.full_name} — ${p.professional_title}`;
   return {
     title: "About",
-    description: p.intro || p.short_bio || `${p.full_name} — ${p.professional_title}`,
+    description,
     alternates: { canonical: "/about" },
+    ...socialMetadata({ path: "/about", title: `About | ${siteName}`, description, image: shareImage(s), siteName }),
   };
 }
 

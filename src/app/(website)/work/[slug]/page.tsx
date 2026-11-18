@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { ProjectDetail } from "@/components/portfolio/project-detail";
 import { env } from "@/config/env";
+import { shareImage, socialMetadata } from "@/lib/seo";
 import { getProjectBySlug, getPublishedProjects, getRelatedProjects, getSiteSettings } from "@/lib/data/public";
 
 /** Cache Components requires at least one param; a placeholder resolves to 404. */
@@ -18,17 +19,23 @@ export async function generateMetadata({ params }: PageProps<"/work/[slug]">): P
   const [project, settings] = await Promise.all([getProjectBySlug(slug), getSiteSettings()]);
   if (!project) return { title: "Project not found", robots: { index: false } };
   const description = project.summary || project.description.slice(0, 160) || settings.seo_description;
+  const siteName = settings.site_name || "Nishit Gundecha";
+  const image = project.thumbnail_url
+    ? { url: project.thumbnail_url, alt: `${project.title} — ${siteName}` }
+    : shareImage(settings);
+  const social = socialMetadata({
+    path: `/work/${project.slug}`,
+    title: `${project.title} | ${siteName}`,
+    description,
+    image,
+    siteName,
+  });
   return {
     title: project.title,
     description,
     alternates: { canonical: `/work/${project.slug}` },
-    openGraph: {
-      type: "video.other",
-      title: project.title,
-      description,
-      images: project.thumbnail_url ? [{ url: project.thumbnail_url, alt: project.title }] : undefined,
-    },
-    twitter: { card: "summary_large_image", title: project.title, description },
+    ...social,
+    openGraph: { ...social.openGraph, type: "video.other" },
   };
 }
 

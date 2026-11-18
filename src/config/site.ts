@@ -61,7 +61,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   hero_poster_path: null,
   seo_title: "Nishit Gundecha | Senior Video Editor & Production Head",
   seo_description:
-    "Explore the creative portfolio of Nishit Gundecha, Senior Video Editor and Production Head, specializing in cinematic storytelling, video editing, creative direction, and production.",
+    "Explore the creative portfolio of Nishit Gundecha, Senior Video Editor & Production Head, specializing in cinematic storytelling, professional video editing, creative direction, and production management.",
   og_image_url: null,
   og_image_path: null,
   footer_text: "",
@@ -133,4 +133,20 @@ export const TAGS = {
   settings: "settings",
   showreel: "showreel",
   socials: "socials",
+} as const;
+
+/** Social sharing defaults (Open Graph + Twitter). The image lives at public/og-image.png. */
+export const SEO = {
+  title: "Nishit Gundecha | Senior Video Editor & Production Head",
+  description:
+    "Explore the creative portfolio of Nishit Gundecha, Senior Video Editor & Production Head, specializing in cinematic storytelling, professional video editing, creative direction, and production management.",
+  ogDescription: "Explore cinematic storytelling and creative video production by Nishit Gundecha.",
+  twitterDescription: "Explore the creative portfolio of Nishit Gundecha.",
+  image: {
+    url: "/og-image.png",
+    width: 1200,
+    height: 630,
+    type: "image/png",
+    alt: "Nishit Gundecha – Senior Video Editor & Production Head",
+  },
 } as const;

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { AboutSection } from "@/components/home/about-section";
 import { ContactCta } from "@/components/home/contact-cta";
 import { ExpertiseSection } from "@/components/home/expertise-section";
@@ -11,6 +12,11 @@ import {
   getSiteSettings,
   getSocialLinks,
 } from "@/lib/data/public";
+
+/** Title, description, Open Graph and Twitter come from the root layout; this pins the canonical. */
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default async function HomePage() {
   const [settings, profile, showreel, featured, socials] = await Promise.all([

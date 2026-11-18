@@ -1,13 +1,20 @@
 import type { Metadata } from "next";
 import { Reveal } from "@/components/animations/reveal";
 import { WorkGrid } from "@/components/portfolio/work-grid";
-import { getCategories, getPublishedProjects } from "@/lib/data/public";
+import { getCategories, getPublishedProjects, getSiteSettings } from "@/lib/data/public";
+import { shareImage, socialMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Work",
-  description: "Commercials, brand films, music videos, short films, documentaries and corporate films.",
-  alternates: { canonical: "/work" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const s = await getSiteSettings();
+  const siteName = s.site_name || "Nishit Gundecha";
+  const description = "Commercials, brand films, music videos, short films, documentaries and corporate films.";
+  return {
+    title: "Work",
+    description,
+    alternates: { canonical: "/work" },
+    ...socialMetadata({ path: "/work", title: `Work | ${siteName}`, description, image: shareImage(s), siteName }),
+  };
+}
 
 export default async function WorkPage() {
   const [projects, categories] = await Promise.all([getPublishedProjects(), getCategories()]);
